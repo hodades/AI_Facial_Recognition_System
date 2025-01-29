@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entry Authorization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0D47A1; /* Dark blue */
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: white;
+            margin-bottom: 30px;
+        }
+        video, canvas {
+            border: 5px solid white;
+            border-radius: 15px;
+            width: 60%;
+            max-width: 800px;
+            background-color: #1565C0; 
+        }
+        button {
+            background-color: #1976D2; 
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #1565C0; /* Darker blue */
+        }
+        #photoContainer {
+            margin-top: 20px;
+        }
+        #downloadLink {
+            display: none;
+            margin-top: 20px;
+            text-decoration: none;
+            color: white;
+            background-color: #1976D2;
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Attendance</h1>
+    <video id="webcam" autoplay playsinline></video>
+    <br>
+    <button id="startWebcam">Start Webcam</button>
+    <button id="takePhoto" style="display:none;">Take a Photo</button>
+    <div id="photoContainer">
+        <canvas id="photoCanvas" style="display:none;"></canvas>
+    </div>
+    <a id="downloadLink" download="photo.png">Download Photo</a>
+    <br>
+    <a href="index.html"><button>Back to Home</button></a> <!-- Updated link -->
+
+    <script>
+        const videoElement = document.getElementById('webcam');
+        const startWebcamButton = document.getElementById('startWebcam');
+        const takePhotoButton = document.getElementById('takePhoto');
+        const canvas = document.getElementById('photoCanvas');
+        const downloadLink = document.getElementById('downloadLink');
+        const context = canvas.getContext('2d');
+
+        startWebcamButton.addEventListener('click', () => {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    videoElement.srcObject = stream;
+                    takePhotoButton.style.display = 'inline-block';
+                })
+                .catch(err => {
+                    console.error("Error accessing webcam: ", err);
+                });
+        });
+
+        takePhotoButton.addEventListener('click', () => {
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+            context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+            canvas.style.display = 'block';
+            
+            canvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                downloadLink.href = url;
+                downloadLink.style.display = 'inline-block';
+                downloadLink.click();
+            }, 'image/png');
+        });
+    </script>
+
+    <button onclick="startNotebook('notebook1')">Accéder au Notebook</button>
+
+    <script>
+        function startNotebook(notebook) {
+            fetch(`http://127.0.0.1:5000/start-notebook/${notebook}`)
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                    alert("Jupyter Notebook lancé !");
+                })
+                .catch(error => console.error("Erreur : ", error));
+        }
+    </script>
+</body>
+</html>
