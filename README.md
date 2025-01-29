@@ -6,7 +6,7 @@
 
 I am a Master's student in **Data & AI applied to business** in Paris, and I am very interested in **Data Science**.  
 
-To practice working on **Data Science projects**, my colleague **Hoda Dades** and I designed an **attendance system based on facial recognition**. This is my **first project** in Data Science and Machine Learning, so it's quite basic. However, I have learned a lot, and it took many hours of work—but I really enjoyed it!  
+To practice working on **Data Science projects**, I designed an **attendance system based on facial recognition** so it's quite basic. However, I have learned a lot, and it took many hours of work—but I really enjoyed it!  
 
 ## How It Works  
 
